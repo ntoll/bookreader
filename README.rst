@@ -16,3 +16,18 @@ the project root::
 
 You'll then find the fluidinfo.js source in the js/fi directory and the
 mustache.js source in the js/mustache directory (relative to the project root).
+
+Running the Application
+-----------------------
+
+Don't try to load the application into your browser directly from the
+filesystem. Modern browsers don't allow CORS (cross-origin resource sharing)
+requests to succeed unless the original page is loaded from a domain (like
+localhost). To simplify things I've created a simple web-server that'll serve
+the application on ``http://localhost:8080`` (you'll need to have Python
+installed for this to work). To make it work open a terminal, navigate to the
+root of this project and type::
+
+    $ ./runserver.py
+
+(The dollar "$" represents the terminal prompt. You don't have to type this.)
