@@ -4,3 +4,6 @@
 [submodule "js/mustache"]
 	path = js/mustache
 	url = https://github.com/janl/mustache.js.git
+[submodule "js/jstorage"]
+	path = js/jstorage
+	url = https://github.com/andris9/jStorage

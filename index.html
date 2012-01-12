@@ -18,41 +18,43 @@
         <script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.js"></script>
         <script type="text/javascript" src="/js/mustache/mustache.js"></script>
         <script type="text/javascript" src="/js/fi/fluidinfo.js"></script>
+        <script type="text/javascript" src="/js/jstorage/jstorage.min.js"></script>
+        <script type="text/javascript" src="/js/bookreader.js"></script>
     </head>
     <body style="padding-top: 40px;">
         <div class="topbar-wrapper" style="z-index: 5;">
             <div class="topbar">
                 <div class="topbar-inner">
                     <div class="container">
-                        <h3><a href="#">Barefoot into Cyberspace</a></h3>
+                        <h3><a href="#" class="about">Barefoot into Cyberspace</a></h3>
                         <ul class="nav">
                             <li class="dropdown" data-dropdown="dropdown">
                                 <a href="#" class="dropdown-toggle">Contents</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#prologue">Prologue: Fierce Dancing</a></li>
+                                    <li><a href="#prologue" class="chapterLink">Prologue: Fierce Dancing</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#command">Digging the command line</a></li>
-                                    <li><a href="#courage">Courage is contagious</a></li>
-                                    <li><a href="#information">Information wants to be free</a></li>
-                                    <li><a href="#kids">Just kids</a></li>
-                                    <li><a href="#anarchists">Anarchists in the UK</a></li>
-                                    <li><a href="#overload">Information Overload</a></li>
-                                    <li><a href="#goolag">Learning to love the Goolag</a></li>
-                                    <li><a href="#ciphers">Ciphers and Doppelgangers</a></li>
-                                    <li><a href="#infowar">Infowar</a></li>
+                                    <li><a href="#command" class="chapterLink">Digging the command line</a></li>
+                                    <li><a href="#courage" class="chapterLink">Courage is contagious</a></li>
+                                    <li><a href="#information" class="chapterLink">Information wants to be free</a></li>
+                                    <li><a href="#kids" class="chapterLink">Just kids</a></li>
+                                    <li><a href="#anarchists" class="chapterLink">Anarchists in the UK</a></li>
+                                    <li><a href="#overload" class="chapterLink">Information Overload</a></li>
+                                    <li><a href="#goolag" class="chapterLink">Learning to love the Goolag</a></li>
+                                    <li><a href="#ciphers" class="chapterLink">Ciphers and Doppelgangers</a></li>
+                                    <li><a href="#infowar" class="chapterLink">Infowar</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#epilogue">Epilogue: Return to Chaos</a></li>
-                                    <li><a href="#acknowledgements">Acknowledgements</a></li>
-                                    <li><a href="#glossary">Glossary</a></li>
-                                    <li><a href="#references">References</a></li>
-                                    <li><a href="#licence">Licence</a></li>
+                                    <li><a href="#epilogue" class="chapterLink">Epilogue: Return to Chaos</a></li>
+                                    <li><a href="#acknowledgements" class="chapterLink">Acknowledgements</a></li>
+                                    <li><a href="#glossary" class="chapterLink">Glossary</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#help">Help</a></li>
+                            <li><a href="#about" class="about">About</a></li>
+                            <li><a href="#help" class="help">Help</a></li>
                         </ul>
                         <ul class="nav secondary-nav">
-                            <li><a href="#login">Login</a></li>
+                            <li id="loginInfo"><a href="#login" class="loginLink">Login</a></li>
+                            <li class="userInfo" style="display: none;"><span style="display: block; float: none; line-height: 19px; text-decoration: none; padding: 10px 10px 11px 10px;">Logged in as: <span id="username"></span></span></li>
+                            <li class="userInfo" style="display: none;"><a href="#logout" id="logoutLink">Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -60,14 +62,40 @@
         </div>
         <div class="container">
             <div class="content" style="padding-top: 8px">
+                <div class="row" id="working" style="display: none;">
+                    <div class="alert-message info">
+                        <h1><strong>Working...</strong></h1>
+                        <p>Communicating with Fluidinfo... <img src="working.gif" alt="Working..."/></p>
+                    </div>
+                </div>
+                <div class="row" id="oops" style="display: none;">
+                    <div class="alert-message error">
+                        <p>
+                            <strong>Oops!</strong>
+                            Something appears to have gone wrong. Please see
+                            the report below.
+                        </p>
+                    </div>
+                    <div id="errorMessage">
+                    </div>
+                </div>
                 <div class="row" id="about">
                     <div class="span7">
                         <img src="barefootintocyberspacebeckyhogge.jpg" alt="Barefoot into Cyberspace" style="float: left; width: 400px;">
                     </div>
                     <div class="span9">
-                        <h1>Barefoot into Cyberspace</h1>
-                        <h2>Interactive Edition!</h2>
-                        <p></p>
+                        <div>
+                        <h1>Annotate this!</h1>
+                        <p>Read <em>Barefoot into Cyberspace</em> online with
+                        this simple web-application, add your own annotations
+                        <u>and</u> see what others have contributed. Through
+                        this process the <em>work</em> that is "Barefoot into
+                        Cyberspace" becomes an evolving collaboration based upon
+                        the seed planted by the original author,
+                        <a href="http://barefootintocyberspace.com/about/">Becky</a>.</p>
+                        <p>Still confused? Click the <a href="#help" class="help">help</a> link at the top of this page.</p>
+                        </div>
+                        <h3>Legalese</h3>
                         <p>This work is made available under a
                         <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/">
                         Creative Commons Attribution-ShareAlike 2.0 UK: England
@@ -97,14 +125,162 @@
                         </ul>
                     </div>
                 </div>
-                <div id="help" style="display: none;">
+                <div id="help" style="display: none;" class="row">
+                    <h1>Using this Application</h1>
+                    <p>Well done, you've found the help page. This proves that
+                    you're at least capable of navigating a UI and clicking on
+                    a <em>"help"</em> link. ;-)</p>
+
+                    <img src="CyberDoI.png" alt="Wordle: http://www.wordle.net/show/wrdl/4647255/DeclarationOfCyberIndependence" style="width:841px; margin-left: auto; margin-right: auto;"/>
+
+                    <p>As the <a href="#" class="about">about page</a> states,
+                    this is a simple web-application that allows you to
+                    contribute annotations to
+                    <a href="http://barefootintocyberspace.com/about/">
+                    Becky Hogge's</a> book <a href="http://barefootintocyberspace.com/book/hypertext/"><em>Barefoot into Cyberspace</em></a>.
+                    Furthermore, you get to see what others have annotated (each
+                    block of text has an associated timeline of comments). As
+                    a result, this application turns the book <em>Barefoot into
+                    Cyberspace</em> into an evolving collaboration.</p>
+
+                    <p>To read a chapter click the "Contents" link at the top
+                    of this page and select the chapter you wish to read.
+                    When reading a chapter click on the tag icons next to each
+                    block of text to see the annotations people have left.
+                    Click the "close" link to dismiss the annotations and
+                    return to reading the chapter. You'll sometimes see links
+                    within the text. Often these work just like regular
+                    links by taking you to another page on the web. However,
+                    some links are really references. When you click these a
+                    pop-over will appear with the relevent reference displayed
+                    inside. Try it now by clicking
+                    <a href="#" id="examplePopover">this link</a> (clicking the
+                    link again hides the popup).</p>
+
+                    <p>What you may not know is that this application is also
+                    a programming example in a book about the openly writeable
+                    data store <a href="http://fluidinfo.com">Fluidinfo</a>. The
+                    book's title is <em>Getting Started with Fluidinfo</em> and
+                    it's published by <a href="http://oreilly.com">O'Reilly</a>.
+                    </p>
+
+                    <p>In order to contribute annotations
+                    you need to have an account on Fluidinfo. Sign up at
+                    <a href="https://fluidinfo.com/accounts/new/">Fluidinfo's
+                    account creation page</a>, return here and then sign in
+                    with your username and password by clicking the
+                    <em>login</em>
+                    link at the top right hand side of this page.</p>
+
+                    <p>Once logged in you'll notice that when you display the
+                    annotations there is also an <em>Annotate this!</em> button
+                    to display a form. Click the "Submit" button to add an
+                    annotation. When any of your annotations are displayed they
+                    will have a <em>delete</em> link next to them. Clicking it
+                    obviously removes the annotation. You can annotate as many
+                    times as you like on any number of blocks of text.</p>
+
+                    <p>You can submit feedback about this application (not the
+                    work <em>Barefoot into Cyberspace</em> itself) at any time
+                    by clicking on the "feedback" link on the left hand side of
+                    the screen.</p>
+
+                    <p>That's it and have fun!</p>
+
                 </div>
+                <div id="chapter" style="display: none;" class="row"></div>
+            </div>
+        </div>
+        <div id="loginForm" class="modal hide" style="display: none;">
+            <div class="modal-header">
+                <a href="#" class="close">&times;</a>
+                <h3>Login</h3>
+            </div>
+            <form id="loginForm" style="margin-bottom: 0px">
+            <div class="modal-body">
+                <fieldset>
+                        <legend>Enter your Fluidinfo username and password</legend>
+                        <div class="clearfix">
+                            <label for="usernameInput">Username</label>
+                            <div class="input">
+                                <input class="xlarge" id="usernameInput" name="usernameInput" size="30" type="text"/>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <label for="passwordInput">Password</label>
+                            <div class="input">
+                                <input class="xlarge" id="passwordInput" name="passwordInput" size="30" type="password"/>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <p class="input">(<a href="https://fluidinfo.com/accounts/new" target="_new">Create a new Fluidinfo account</a>)</p>
+                        </div>
+                    </fieldset>
+            </div>
+            <div class="modal-footer">
+                            <input type="submit" class="btn primary" value="Submit"/>
+                            <button type="reset" class="btn" id="cancelLogin">Cancel</button>
+            </div>
+            </form>
+        </div>
+        <div id="annotations" class="modal hide" style="display: none;">
+            <div class="modal-header">
+                <a href="#" class="close">&times;</a>
+                <h3>Annotations</h3>
+            </div>
+            <div class="modal-body">
+                <div id="newCommentContainer" style="display: none;">
+                    <div id="annotateButtonContainer">
+                        <button class="btn primary" id="annotateButton">
+                        Annotate this!
+                        </button>
+                    </div>
+                    <form id="newCommentForm" class="form-stacked" style="display:none;">
+                        <fieldset>
+                            <legend>Annotate this!</legend>
+                        <div class="clearfix">
+                            <div class="input">
+                                <textarea class="span8" id="newCommentContent" name="newCommentContent" rows=4></textarea>
+                                <input type="hidden" value="" id="parentObject"/>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <div class="input">
+                                <button type="submit" class="btn primary" id="submitAnnotation" data-loading-text="Working...">Submit</button>
+                                <button type="reset" class="btn" id="cancelAnnotation">Cancel</button>
+                            </div>
+                        </div>
+                        </fieldset>
+                    </form>
+                    <hr/>
+                </div>
+                <div id="nothingTaggedAnonymous" style="display: none;">
+                    <h2>No annotations</h2>
+                    <p>Fix this by signing up, logging in and clicking the
+                    tag icon again. You'll find a form for adding your own
+                    annotations in the resulting popup.</p>
+                </div>
+                <div id="nothingTaggedLoggedIn" style="display:none;">
+                    <h2>No annotations</h2>
+                    <p>Fix this by clicking on the <em>"Annotate this!"</em>
+                    button above.</p>
+                </div>
+                <div id="fetchingCommentTags" class="alert-message info" style="display:none;">
+                    <p>Communicating with Fluidinfo... <img src="working.gif" alt="Working..."/></p>
+                </div>
+                <div id="commentTagValues" style="display:none; max-height:260px; overflow: auto;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="closeAnnotations">Close</button>
             </div>
         </div>
         <script type="text/javascript">
         $(document).ready(function() {
-            $('#topbar').dropdown();
+            var app = bookreader();
+            app.init();
         });
         </script>
+        <script type="text/javascript"> var uvOptions = {}; (function() { var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true; uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/PY4s68g9WzLBrgYnFGglg.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s); })(); </script>
     </body>
 </html>
