@@ -13,6 +13,18 @@ var bookreader = function() {
     // The object to be returned.
     var result = {};
 
+    // The tag being used to store comments
+    var commentTag = "comment"
+
+    // Used to delineate individual comments in the commentTag
+    var splitChar = "\n\u00B6\n";
+
+    // Used to hold the list of comments on the block object that has focus
+    var myComments = [];
+
+    // Used to match tag paths
+    var commentMatcher = new RegExp("^\\w+\\/"+commentTag+"$");
+
     // Various DOM elements that need to be referenced
     var contentBlocks = $(".row");
     var about = $("#about");
@@ -205,6 +217,35 @@ var bookreader = function() {
     };
 
     /*
+    Updates the participant counter for the object identified by the passed in
+    about value.
+    */
+    var countParticipantComments = function(about){
+        // Find the number of participants commenting on the block of
+        // text.
+        var participantOptions = {
+            path: "about/" + about,
+            onSuccess: function(result){
+                // grab the users from the comment tags
+                var counter = 0;
+                for(i in result.data.tagPaths){
+                    var pathName = result.data.tagPaths[i];
+                    if(pathName.match(commentMatcher)) {
+                        counter++;
+                    }
+                }
+                // update UI
+                if(counter>0) {
+                    $("#"+result.data["id"]).html(counter).fadeIn("fast");
+                } else {
+                    $("#"+result.data["id"]).html("");
+                }
+            }
+        };
+        session.api.get(participantOptions);
+    }
+
+    /*
     Given a click event, will get and display the selected chapter.
     */
     var getChapter = function(e) {
@@ -220,10 +261,11 @@ var bookreader = function() {
             // add them to the DOM
             chapter.empty();
             var i;
-            var template = '<div style="margin-bottom: 18px;" class="span13 offset1">{{{block}}}</div><div class="span2"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6);"/></a></div>';
+            var template = '<div style="margin-bottom: 18px;" class="span13 offset1">{{{block}}}</div><div class="span2"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}"><small style="color: #999;">&nbsp;</small></span></div>';
             for(i=0; i<orderedBlocks.length; i++){
                 block = orderedBlocks[i];
-                var renderedBlock = $(Mustache.to_html(template, {block: block["beckyhogge/html"]}));
+                var id = block["id"];
+                var renderedBlock = $(Mustache.to_html(template, {block: block["beckyhogge/html"], id: id}));
                 chapter.append(renderedBlock);
 
                 /**
@@ -249,6 +291,7 @@ var bookreader = function() {
                         popupInit(references[j], renderedBlock);
                     }
                 }
+                countParticipantComments(block["fluiddb/about"]);
             }
             // ensure the chapter is visible
             contentBlocks.hide();
@@ -298,64 +341,162 @@ var bookreader = function() {
     var showLogin = function(){
         loginForm.modal("show");
         $("#usernameInput").focus();
+        return false;
+    };
+
+    /*
+    Returns a list of objects representing comments from a string.
+    */
+    var extractComments = function(comments, author, about) {
+        var result = [];
+        var rawCommentList = comments.split(splitChar);
+        var i;
+        for(i=0; i<rawCommentList.length; i++){
+            var rawComment = rawCommentList[i];
+            if(rawComment.length > 31) {
+                // UTC strings are always 29 characters long
+                var dateString = rawComment.slice(0, 29);
+                // Drop the newline at position 30
+                var commentString = rawComment.slice(30);
+                var commentDate = new Date(dateString);
+                result.push({
+                    author: author,
+                    timestamp: commentDate,
+                    val: commentString,
+                    about: about
+                })
+            }
+        }
+        return result;
+    }
+
+    /*
+    Packs a list of comments into a string representation
+    */
+    var packComments = function(comments) {
+        var commentList = [];
+        var i;
+        for(i=0; i<comments.length; i++){
+            var commentObject = comments[i];
+            var commentAsString = commentObject.timestamp.toUTCString() + "\n" + commentObject.val;
+            commentList.push(commentAsString);
+        }
+        if(commentList.length === 1) {
+            return commentList[0]+splitChar;
+        } else {
+            return commentList.join(splitChar);
+        }
+    }
+
+    /**
+    Returns a randomly generated string that looks like a UUID4 (but isn't).
+    Based upon the example here: http://bit.ly/rh378d
+    */
+    var uuid = function() {
+        var S4 = function() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        };
+        return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+    };
+
+    /*
+    Given a list of comments, saves this under the user's commentTag.
+    */
+    var saveComments = function(options) {
+        var stringValue = packComments(options.commentList);
+        var tagPath = options.author+"/"+commentTag;
+        var values = {};
+        values[tagPath] = stringValue;
+        var tagOptions = {
+            values: values,
+            about: options.about,
+            onSuccess: function(result){
+                myComments = options.commentList;
+                options.onSuccess(result);
+                countParticipantComments(options.about);
+            },
+            onError: options.onError
+        }
+        session.tag(tagOptions);
     };
 
     /*
     Returns an appropriately rendered element to insert into the DOM.
     */
     var createAnnotation = function(annotation){
-        var uniqueID = Mustache.to_html("{{about}}-{{author}}-{{timestamp}}", annotation).replace(/\:/g, "_");
+        var uniqueID = uuid();
         var template = '<div style="border-bottom: 1px solid #EEE; margin-bottom: 10px; padding-bottom: 10px;" id="{{id}}"><div><strong>{{author}}</strong> - {{date}} {{#delete}}<a class="deleteAnnotation" href="#"><small>delete</small></a>{{/delete}}</div><div>{{val}}</div></div>';
         annotation["id"] = uniqueID;
-        annotation["date"] = new Date(parseInt(annotation.timestamp)).toDateString();
+        annotation["date"] = annotation.timestamp.toDateString();
         annotation["delete"] = annotation.author === session.username;
         var result = $(Mustache.to_html(template, annotation));
         // Add a delete event handler
         var deleteAnchor = result.find(".deleteAnnotation");
         deleteAnchor.click(function(e){
             deleteAnchor.attr("disabled", "disabled");
-            session.api.del({
-                path: "tags/"+annotation.path,
-                onSuccess: function(result){
-                    var removeMe = $("#"+uniqueID);
-                    if(commentTagValues[0].childElementCount === 1){
-                        removeMe.remove();
-                        nothingTaggedLoggedIn.fadeIn("fast");
-                    } else {
-                        removeMe.hide("fast", function() {
-                            removeMe.remove();
-                        });
-                    }
-                },
-                onError: function(result){
-                    deleteAnchor.removeAttr("disabled");
-                    onAnnotateError(result);
-                }
+            revisedCommentList = $.grep(myComments, function(val){
+                return val.timestamp.valueOf() != annotation.timestamp.valueOf();
             });
+            var cleanUpDelete = function() {
+                var removeMe = $("#"+uniqueID);
+                if(commentTagValues[0].childElementCount === 1){
+                    removeMe.remove();
+                    nothingTaggedLoggedIn.fadeIn("fast");
+                } else {
+                    removeMe.hide("fast", function() {
+                        removeMe.remove();
+                    });
+                }
+            }
+            if(revisedCommentList.length > 0){
+                var options = {
+                    commentList: revisedCommentList,
+                    author: annotation.author,
+                    about: annotation.about,
+                    onSuccess: function(result){
+                        cleanUpDelete();
+                    },
+                    onError: function(result){
+                        deleteAnchor.removeAttr("disabled");
+                        onAnnotateError(result);
+                    }
+                };
+                saveComments(options);
+            } else {
+                session.api.del({
+                    path: ["about", annotation.about, annotation.author, commentTag],
+                    onSuccess: function(result){
+                        myComments = [];
+                        cleanUpDelete();
+                        countParticipantComments(annotation.about);
+                    },
+                    onError: function(result){
+                        deleteAnchor.removeAttr("disabled");
+                        onAnnotateError(result);
+                    }
+                });
+            }
             return false;
         });
         return result;
     }
 
-
     /*
     Displays the comments annotated onto the object.
     */
     var showComments = function(result){
+        myComments = []; // reset state
         var commentList = [];
         for(comment in result.data){
-            if(comment === "id" || comment === "fluiddb/about") {
-                continue;
+            if(comment.match(commentMatcher)) {
+                var author = comment.split("/")[0];
+                var extractedComments = extractComments(result.data[comment], author, result.data["fluiddb/about"]);
+                if(author === session.username){
+                    // The current user has left comments.
+                    myComments = extractedComments;
+                }
+                $.merge(commentList, extractedComments);
             }
-            var splitName = comment.split("/");
-            var commentValue = result.data[comment];
-            commentList.push({
-                author: splitName[0],
-                timestamp: splitName[2],
-                val: commentValue,
-                about: result.data["fluiddb/about"],
-                path: comment
-            });
         }
         fetchingCommentTags.hide();
         if(commentList.length === 0) {
@@ -366,7 +507,7 @@ var bookreader = function() {
             }
         } else {
             var orderedComments = commentList.sort(function(a, b){
-                return b.timestamp - a.timestamp;
+                return b.timestamp.valueOf() - a.timestamp.valueOf();
             });
             var i;
             for(i=0; i<orderedComments.length; i++){
@@ -396,10 +537,9 @@ var bookreader = function() {
         var onSuccess = function(result){
             var commentTags = ['fluiddb/about'];
             var i;
-            var r = /^\w+\/comments\/\d+$/;
             for(i=0; i<result.data.tagPaths.length; i++) {
                 var tag = result.data.tagPaths[i];
-                if(tag.match(r)){
+                if(tag.match(commentMatcher)){
                     // it must be a comment tag path.
                     commentTags.push(tag);
                 }
@@ -449,39 +589,35 @@ var bookreader = function() {
         }
         // Create a new annotation object.
         var user = session.username;
-        var timestampValue = new Date().valueOf();
-        var tagName = user+"/comments";
+        var timestampValue = new Date();
         var commentValue = strippedInput;
         var parentBlockValue = $("#parentObject").attr("value");
-
-        var onSuccess = function(result){
-            // add to the list of annotations
-            var newAnnotation = createAnnotation({
-                about: parentBlockValue,
-                author: user,
-                timestamp: timestampValue,
-                val: commentValue,
-                path: tagName
-            });
-            commentTagValues.prepend(newAnnotation);
-            newAnnotation.fadeIn("fast");
-            // Update the UI to a new good state.
-            commentTagValues.show();
-            nothingTaggedLoggedIn.hide();
-            resetAnnotationForm();
-            newCommentForm.hide();
-            annotateButton.show();
+        var newCommentObject = {
+            author: user,
+            timestamp: timestampValue,
+            val: commentValue,
+            about: parentBlockValue
         };
-        var values = {}
-        values[tagName] = commentValue;
-
+        myComments.push(newCommentObject);
         var options = {
-            values: values,
+            commentList: myComments,
+            author: session.username,
             about: parentBlockValue,
-            onSuccess: onSuccess,
+            onSuccess: function(result){
+                // add to the list of annotations
+                var newAnnotation = createAnnotation(newCommentObject);
+                commentTagValues.prepend(newAnnotation);
+                newAnnotation.fadeIn("fast");
+                // Update the UI to a new good state.
+                commentTagValues.show();
+                nothingTaggedLoggedIn.hide();
+                resetAnnotationForm();
+                newCommentForm.hide();
+                annotateButton.show();
+            },
             onError: onAnnotateError
         }
-        session.tag(options);
+        saveComments(options);
         return false;
     };
 
