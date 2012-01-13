@@ -49,6 +49,7 @@
                                 </ul>
                             </li>
                             <li><a href="#about" class="about">About</a></li>
+                            <li><a href="#colophon" class="colophon">Colophon</a></li>
                             <li><a href="#help" class="help">Help</a></li>
                         </ul>
                         <ul class="nav secondary-nav">
@@ -123,16 +124,104 @@
                             http://barefootintocyberspace.com/book/hypertext</a>
                             </li>
                         </ul>
-                        <h3>Colophon</h3>
-                        <p>This web-application was created by
-                        <a href="http://ntoll.org/about/">Nicholas H.Tollervey
-                        </a> (<a href="http://twitter.com/ntoll">@ntoll</a> on
-                        Twitter) over the first week in 2012. It's entirely
-                        written in Javascript and the source code is freely
-                        available
-                        <a href="https://github.com/ntoll/bookreader">here</a>.
-                        </p>
                     </div>
+                </div>
+                <div class="row" style="display: none;" id="colophon">
+                    <h1>Colophon</h1>
+                    <img src="cover.png" alt="The Fluidinfo Cthulhu" style="float: right;"/>
+                    <p>This web-application was created by
+                    <a href="http://ntoll.org/about/">Nicholas H.Tollervey
+                    </a> (<a href="http://twitter.com/ntoll">@ntoll</a> on
+                    Twitter) over the first week in 2012. It's entirely
+                    written in Javascript and the source code is freely
+                    available
+                    <a href="https://github.com/ntoll/bookreader">here</a>.
+                    </p>
+                    <p>It makes use of the following Javascript libraries:</p>
+                    <ul>
+                        <li><a href="http://github.com/fluidinfo/fluidinfo.js">fluidinfo.js</a></li>
+                        <li><a href="https://github.com/janl/mustache.js">mustache.js</a></li>
+                        <li><a href="http://www.jstorage.info/">jStorage</a></li>
+                    </ul>
+                    <p>Styling is provided by
+                    <a href="http://twitter.github.com/bootstrap/">Bootstrap
+                    </a> and the feedback widget is from
+                    <a href="http://uservoice.com">Uservoice</a>.</p>
+                    <h2>Getting Started with Fluidinfo</h2>
+                    <p>This website is a programming example in the
+                    <a href="http://oreilly.com">O'Reilly</a> book <em>Getting
+                    Started with Fluidinfo</em>. The design and implementation
+                    is explored in detail towards the end of the book.
+                    However, a summary is given briefly below.</p>
+
+                    <p>Fluidinfo stores data on objects about things. In the
+                    case of this application, there are a set of objects in
+                    Fluidinfo that represent each block of text in the work
+                    that is <em>Barefoot into Cyberspace</em>. Each of these
+                    objects has a unique <em>about</em> value to identify it.
+                    For this application we've used about values that follow
+                    this naming scheme:</p>
+                    <pre> barefootintocyberspace:CHAPTER:POSITION </pre>
+                    <p>So the object whose about value is:</p>
+                    <pre> barefootintocyberspace:prologue:2 </pre>
+                    <p>represents the second block of text in the
+                    <em>prologue</em> chapter.</p>
+
+                    <p>Each of these objects will have at least the following
+                    six tags and associated values (in addition to the
+                    <em>fluiddb/about</em> tag):</p>
+                    <dl>
+                        <dt>beckyhogge/html</dt>
+                        <dd>The HTML content of the block represented by the
+                        object.</dd>
+                        <dt>beckyhogge/licence</dt>
+                        <dd>A link to the block's licence. </dd>
+                        <dt>beckyhogge/work</dt>
+                        <dd>The about value of the object representing the
+                        whole work that is <em>Barefoot into Cyberspace</em>.
+                        </dd>
+                        <dt>beckyhogge/parent</dt>
+                        <dd>The parent block (chapter) of the block represented
+                        by the object.</dd>
+                        <dt>beckyhogge/position</dt>
+                        <dd>The position of the block within the order of the
+                        parent block.</dd>
+                        <dt>beckyhogge/references</dt>
+                        <dd>Any references contained within the block.</dd>
+                    </dl>
+                    <p>When someone creates an annotation a <em>comment</em>
+                    tag is attached to the object representing the appropriate
+                    block of text. The associated value is a string containing
+                    a list of one or more comments. Comments are deliniated by
+                    the &#182; (Pilcrow) character like this:</p>
+                    <pre>Fri, 13 Jan 2012 21:50:57 GMT
+Comment 1
+&#182;
+Fri, 13 Jan 2012 21:51:01 GMT
+Comment 2</pre>
+                    <p>Each comment starts with its creation time expressed as
+                    a human and machine readable version of universal time. The
+                    comment starts on the next line until the pilcrow is
+                    reached.</p>
+                    <p>This way of storing comments has several benefits:</p>
+                    <ul>
+                        <li>Re-use of the <em>comment</em> tag convention.
+                        </li>
+                        <li>Comments are searchable with the
+                        <em>matches</em> keyword in the Fluidinfo query
+                        language.</li>
+                        <li>Comments are both human and machine readable.
+                        </li>
+                        <li>It's very very simple (keep it simple stupid).</li>
+                    </ul>
+                    <p>Please use the feedback link on the left hand side of
+                    this page to ask questions. If you would like to report a
+                    bug or request a feature then visit the project's
+                    <a href="https://github.com/ntoll/bookreader/issues">
+                    homepage on Github</a>.</p>
+                    <p>Alternatively, fork the project and buildy something
+                    amazing.</p>
+                    <p>Comments, suggestions and critique are most welcome!</p>
                 </div>
                 <div id="help" style="display: none;" class="row">
                     <h1>Using this Application</h1>
@@ -155,16 +244,22 @@
                     <p>To read a chapter click the "Contents" link at the top
                     of this page and select the chapter you wish to read.
                     When reading a chapter click on the tag icons next to each
-                    block of text to see the annotations people have left.
-                    Click the "close" link to dismiss the annotations and
-                    return to reading the chapter. You'll sometimes see links
-                    within the text. Often these work just like regular
-                    links by taking you to another page on the web. However,
-                    some links are really references. When you click these a
-                    pop-over will appear with the relevent reference displayed
-                    inside. Try it now by clicking
+                    block of text to see the annotations people have left. If
+                    there is a number next to the tag it indicates the
+                    <strong>number of participants</strong> annotating the
+                    specific block of text (<strong>not the total number of
+                    comments</strong>). Click the "close" button to dismiss the
+                    annotations and return to reading the chapter. You'll
+                    sometimes see links within the text. Often these work just
+                    like regular links by taking you to another page on the web.
+                    However, some links are really references. When you click
+                    these a pop-over will appear with the relevent reference
+                    displayed inside. Try it now by clicking
                     <a href="#" id="examplePopover">this link</a> (clicking the
-                    link again hides the popup).</p>
+                    link again hides the popup). At the bottom of each chapter
+                    are two buttons (<em>Previous</em> and <em>Next</em>) whose
+                    function is to allow you to move between chapters easily.
+                    </p>
 
                     <p>What you may not know is that this application is also
                     a programming example in a book about the openly writeable

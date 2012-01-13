@@ -28,11 +28,13 @@ var bookreader = function() {
     // Various DOM elements that need to be referenced
     var contentBlocks = $(".row");
     var about = $("#about");
+    var colophon = $("#colophon");
     var help = $("#help");
     var examplePopover = $("#examplePopover");
     var oops = $("#oops");
     var working = $("#working");
     var aboutLinks = $(".about");
+    var colophonLinks = $(".colophon");
     var helpLinks = $(".help");
     var chapter = $("#chapter");
     var loginLink = $(".loginLink");
@@ -315,6 +317,15 @@ var bookreader = function() {
     var showAbout = function(){
         contentBlocks.hide();
         about.fadeIn("fast");
+        return false;
+    };
+
+    /*
+    Displays the colophon page (containing technical details).
+    */
+    var showColophon = function(){
+        contentBlocks.hide();
+        colophon.fadeIn("fast");
         return false;
     };
 
@@ -627,6 +638,7 @@ var bookreader = function() {
     result.init = function(){
         $('#topbar').dropdown();
         aboutLinks.click(showAbout);
+        colophonLinks.click(showColophon);
         helpLinks.click(showHelp);
         loginForm.modal({
             backdrop: "static"
