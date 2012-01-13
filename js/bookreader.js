@@ -38,6 +38,8 @@ var bookreader = function() {
     var nothingTaggedLoggedIn = $("#nothingTaggedLoggedIn");
     var fetchingCommentTags = $("#fetchingCommentTags");
     var commentTagValues = $("#commentTagValues");
+    var previousLink = $("#previousLink");
+    var nextLink = $("#nextLink");
 
     // The session to be used to connect to Fluidinfo (defaults to anonymous).
     var session = fluidinfo({});
@@ -155,12 +157,61 @@ var bookreader = function() {
     };
 
     /*
+    Given a chapter name will display and set up the previous/next buttons
+    at the bottom of the screen.
+    */
+    var showNavButtons = function(chapter) {
+        // Ordered list of chapters
+        var chapterList = [
+            "prologue",
+            "command",
+            "courage",
+            "information",
+            "kids",
+            "anarchists",
+            "overload",
+            "goolag",
+            "ciphers",
+            "infowar",
+            "epilogue",
+            "acknowledgements",
+            "glossary"
+        ];
+        var i;
+        var previous;
+        var next;
+        for(i=0; i<chapterList.length; i++){
+            if(chapter === chapterList[i]){
+                // Found the current chapter
+                previous = i-1;
+                next = i+1;
+                break;
+            }
+        }
+        if(previous >= 0) {
+            previousLink.removeAttr("disabled");
+            previousLink.attr("href", "#"+chapterList[previous]);
+            previousLink.show();
+        } else {
+            previousLink.hide();
+        }
+        if(next <= 12) {
+            nextLink.removeAttr("disabled");
+            nextLink.attr("href", "#"+chapterList[next]);
+            nextLink.show();
+        } else {
+            nextLink.hide();
+        }
+    };
+
+    /*
     Given a click event, will get and display the selected chapter.
     */
     var getChapter = function(e) {
         contentBlocks.hide();
         showWorking();
-        var chapterName = "barefootintocyberspace:" + e.srcElement.hash.replace("#", "");
+        var chapterHash = e.srcElement.hash.replace("#", "");
+        var chapterName = "barefootintocyberspace:" + chapterHash;
         var onSuccess = function(result) {
             // order the results
             var orderedBlocks = result.data.sort(function(a, b){
@@ -169,7 +220,7 @@ var bookreader = function() {
             // add them to the DOM
             chapter.empty();
             var i;
-            var template = '<div style="margin-bottom: 18px;" class="span15">{{{block}}}</div><div class="span1"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6);"/></a></div>';
+            var template = '<div style="margin-bottom: 18px;" class="span13 offset1">{{{block}}}</div><div class="span2"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6);"/></a></div>';
             for(i=0; i<orderedBlocks.length; i++){
                 block = orderedBlocks[i];
                 var renderedBlock = $(Mustache.to_html(template, {block: block["beckyhogge/html"]}));
@@ -202,6 +253,9 @@ var bookreader = function() {
             // ensure the chapter is visible
             contentBlocks.hide();
             chapter.fadeIn("fast");
+            // show the nav buttons
+            showNavButtons(chapterHash);
+            $("#bottomNav").fadeIn("fast");
         };
         var options = {
             select: ["beckyhogge/html", "beckyhogge/position", "beckyhogge/references", "fluiddb/about"],
@@ -396,7 +450,7 @@ var bookreader = function() {
         // Create a new annotation object.
         var user = session.username;
         var timestampValue = new Date().valueOf();
-        var tagName = user+"/comments/"+timestampValue;
+        var tagName = user+"/comments";
         var commentValue = strippedInput;
         var parentBlockValue = $("#parentObject").attr("value");
 
@@ -456,6 +510,8 @@ var bookreader = function() {
         logoutLink.click(logout);
         loginForm.submit(login);
         $(".chapterLink").click(getChapter);
+        previousLink.click(getChapter);
+        nextLink.click(getChapter);
         annotateButton.click(function(){
             annotateButton.hide();
             newCommentForm.fadeIn("fast");
