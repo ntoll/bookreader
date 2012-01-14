@@ -20,6 +20,19 @@
         <script type="text/javascript" src="js/fi/fluidinfo.js"></script>
         <script type="text/javascript" src="js/jstorage/jstorage.min.js"></script>
         <script type="text/javascript" src="js/bookreader.js"></script>
+        <style>
+        .textBlock p, .textBlock dt{
+            font-family: 'Sorts Mill Goudy', Georgia, serif;
+            font-size: 20px;
+            line-height: 1.5;
+        }
+        .textBlock h2{
+            font-family: 'Sorts Mill Goudy', Georgia, serif;
+            font-size: 60px;
+            font-weight: normal;
+            line-height: 1.5;
+        }
+        </style>
     </head>
     <body style="padding-top: 40px;">
         <div class="topbar-wrapper" style="z-index: 5;">
@@ -94,7 +107,12 @@
                         Cyberspace" becomes an evolving collaboration based upon
                         the seed planted by the original author,
                         <a href="http://barefootintocyberspace.com/about/">Becky</a>.</p>
-                        <p>Still confused? Click the <a href="#help" class="help">help</a> link at the top of this page.</p>
+
+                        <p>Still confused? Click the <a href="#help" class="help">help</a> link at the top of this page. Want to know more about how the application works? Click the <a href="#colophon">colophon</a> link at the top.</p>
+
+                        <p>Get started by clicking:
+                        <a href="#prologue" class="chapterLink">Prologue: Fierce
+                        Dancing</a>.</p>
                         </div>
                         <h3>Legalese</h3>
                         <p>This work is made available under a
@@ -128,7 +146,7 @@
                 </div>
                 <div class="row" style="display: none;" id="colophon">
                     <h1>Colophon</h1>
-                    <img src="cover.png" alt="The Fluidinfo Cthulhu" style="float: right;"/>
+                    <img src="cover.png" alt="The Fluidinfo Cthulhu" style="float: right; margin-bottom: 10px;"/>
                     <p>This web-application was created by
                     <a href="http://ntoll.org/about/">Nicholas H.Tollervey
                     </a> (<a href="http://twitter.com/ntoll">@ntoll</a> on
@@ -150,9 +168,12 @@
                     <h2>Getting Started with Fluidinfo</h2>
                     <p>This website is a programming example in the
                     <a href="http://oreilly.com">O'Reilly</a> book <em>Getting
-                    Started with Fluidinfo</em>. The design and implementation
-                    is explored in detail towards the end of the book.
-                    However, a summary is given briefly below.</p>
+                    Started with Fluidinfo</em> (whose
+                    <a href="http://www.venganza.org/">Flying Spaghetti
+                    Monster</a> like cover animal is shown to the right). The
+                    design and implementation is explored in detail towards the
+                    end of the book. However, a summary is given briefly
+                    below.</p>
 
                     <p>Fluidinfo stores data on objects about things. In the
                     case of this application, there are a set of objects in
@@ -162,7 +183,9 @@
                     For this application we've used about values that follow
                     this naming scheme:</p>
                     <pre> barefootintocyberspace:CHAPTER:POSITION </pre>
-                    <p>So the object whose about value is:</p>
+                    <p>Where <em>CHAPTER</em> and <em>POSITION</em> are replaced
+                    by a short name of the chapter and block number
+                    respectively. So the object whose about value is:</p>
                     <pre> barefootintocyberspace:prologue:2 </pre>
                     <p>represents the second block of text in the
                     <em>prologue</em> chapter.</p>
@@ -244,22 +267,28 @@ Comment 2</pre>
                     <p>To read a chapter click the "Contents" link at the top
                     of this page and select the chapter you wish to read.
                     When reading a chapter click on the tag icons next to each
-                    block of text to see the annotations people have left. If
-                    there is a number next to the tag it indicates the
-                    <strong>number of participants</strong> annotating the
-                    specific block of text (<strong>not the total number of
-                    comments</strong>). Click the "close" button to dismiss the
-                    annotations and return to reading the chapter. You'll
-                    sometimes see links within the text. Often these work just
-                    like regular links by taking you to another page on the web.
-                    However, some links are really references. When you click
-                    these a pop-over will appear with the relevent reference
-                    displayed inside. Try it now by clicking
+                    block of text to see the annotations people have left
+                    (see the image below). If there is a number next to the tag
+                    it indicates the <strong>number of participants</strong>
+                    annotating the specific block of text (<strong>not the
+                    total number of comments</strong>). Click the "close"
+                    button to dismiss the annotations and return to reading the
+                    chapter. You'll sometimes see links within the text. Often
+                    these work just like regular links by taking you to another
+                    page on the web. However, some links are really references.
+                    When you click these a pop-over will appear with the
+                    relevent reference displayed inside. Try it now by clicking
                     <a href="#" id="examplePopover">this link</a> (clicking the
                     link again hides the popup). At the bottom of each chapter
                     are two buttons (<em>Previous</em> and <em>Next</em>) whose
                     function is to allow you to move between chapters easily.
                     </p>
+
+                    <hr/>
+
+                    <img src="showme.png" alt="Show me the UI"/>
+
+                    <hr/>
 
                     <p>What you may not know is that this application is also
                     a programming example in a book about the openly writeable
@@ -294,8 +323,8 @@ Comment 2</pre>
                 </div>
                 <div id="chapter" style="display: none;" class="row"></div>
                 <div id="bottomNav" class="row" style="margin-bottom: 10px; display: none;">
-                    <div id="previousChapter" class="span1 offset1"><a href="#" class="btn small" style="display: none;" id="previousLink">Previous</a>&nbsp;</div>
-                    <div id="nextChapter" class="span1 offset11"><a href="#" class="btn small" style="display: none;" id="nextLink">Next</a></div>
+                    <div id="previousChapter" class="span1 offset2"><a href="#" class="btn" style="display: none;" id="previousLink">Previous</a>&nbsp;</div>
+                    <div id="nextChapter" class="span1 offset9"><a href="#" class="btn" style="display: none;" id="nextLink">Next</a></div>
                 </div>
             </div>
         </div>

@@ -263,7 +263,7 @@ var bookreader = function() {
             // add them to the DOM
             chapter.empty();
             var i;
-            var template = '<div style="margin-bottom: 18px;" class="span13 offset1">{{{block}}}</div><div class="span2"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}"><small style="color: #999;">&nbsp;</small></span></div>';
+            var template = '<div style="margin-bottom: 18px;" class="span11 offset2 textBlock">{{{block}}}</div><div class="span3"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}"><small style="color: #999;">&nbsp;</small></span></div>';
             for(i=0; i<orderedBlocks.length; i++){
                 block = orderedBlocks[i];
                 var id = block["id"];
@@ -360,6 +360,20 @@ var bookreader = function() {
     */
     var extractComments = function(comments, author, about) {
         var result = [];
+        if(typeof(comments) !== "string") {
+            return [{author: author,
+                    timestamp: new Date(0),
+                    val: "Unreadable comment.",
+                    about: about
+                    }];
+        }
+        if(comments.indexOf(splitChar)<0){
+            return [{author: author,
+                    timestamp: new Date(0),
+                    val: commentString,
+                    about: about
+                    }];
+        }
         var rawCommentList = comments.split(splitChar);
         var i;
         for(i=0; i<rawCommentList.length; i++){
