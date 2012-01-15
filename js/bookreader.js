@@ -456,7 +456,10 @@ var bookreader = function() {
         if(annotation.timestamp.valueOf() === new Date(0).valueOf()) {
             annotation.date = "Unknown date";
         } else {
-            annotation.date = annotation.timestamp.toDateString();
+            annotation.date = Mustache.to_html("{{date}} - {{time}}", {
+                date: annotation.timestamp.toLocaleDateString(),
+                time: annotation.timestamp.toLocaleTimeString()
+            });
         }
         annotation["delete"] = annotation.author === session.username;
         if(annotation.val.length === 0) {
