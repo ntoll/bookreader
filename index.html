@@ -42,7 +42,7 @@
                         <h3><a href="#" class="about">Barefoot into Cyberspace</a></h3>
                         <ul class="nav">
                             <li class="dropdown" data-dropdown="dropdown">
-                                <a href="#" class="dropdown-toggle">Contents</a>
+                                <a href="#" class="dropdown-toggle" title="Click to select a chapter">Contents</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#prologue" class="chapterLink">Prologue: Fierce Dancing</a></li>
                                     <li class="divider"></li>
@@ -61,9 +61,10 @@
                                     <li><a href="#glossary" class="chapterLink">Glossary</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#about" class="about">About</a></li>
-                            <li><a href="#colophon" class="colophon">Colophon</a></li>
-                            <li><a href="#help" class="help">Help</a></li>
+                            <li><a href="#about" class="about" title="About this application">About</a></li>
+                            <li><a href="#colophon" class="colophon" title="How this application was built">Colophon</a></li>
+                            <li><a href="javascript:UserVoice.showPopupWidget();" title="Open the feedback widget">Feedback</a></li>
+                            <li><a href="#help" class="help" title="How to use this application">Help</a></li>
                         </ul>
                         <ul class="nav secondary-nav">
                             <li id="loginInfo"><a href="#login" class="loginLink">Login</a></li>
@@ -99,24 +100,27 @@
                     </div>
                     <div class="span9">
                         <div>
-                        <h1>Annotate this!</h1>
-                        <p>Read <em>Barefoot into Cyberspace</em> online with
-                        this simple web-application, add your own annotations
-                        <u>and</u> see what others have contributed. Through
-                        this process the <em>work</em> that is "Barefoot into
-                        Cyberspace" becomes an evolving collaboration based upon
-                        the seed planted by the original author,
-                        <a href="http://barefootintocyberspace.com/about/">Becky</a>.</p>
+                        <h1 style="font-size: 60px; font-weight: normal; margin: 10px 0 40px 0;">Annotate this!</h1>
+                        <p style="font-size: 24px; line-height: 1.2;">Read
+                        <em>Barefoot into Cyberspace</em> online. Share
+                        your thoughts in annotations. Read other's comments.</p>
+                        <hr/>
+                        <p>This site makes "Barefoot" a collaboration growing
+                        from the seed planted by
+                        <a href="http://barefootintocyberspace.com/about/"
+                        target="_new">Becky</a>.</p>
 
-                        <p>Still confused? Click the <a href="#help" class="help">help</a> link at the top of this page. Want to know more about how the application works? Click the <a href="#colophon">colophon</a> link at the top.</p>
+                        Read the <a href="#help" class="help">help</a> page
+                        to learn how to use this site. Check out the
+                        <a href="#colophon" class="colophon">colophon</a> to
+                        discover how and why the site was built.</p>
 
-                        <p>Get started by clicking:
-                        <a href="#prologue" class="chapterLink">Prologue: Fierce
-                        Dancing</a>.</p>
+                        <p><a href="#prologue" class="btn large primary chapterLink">Start reading</a></p>
                         </div>
                         <h3>Legalese</h3>
                         <p>This work is made available under a
-                        <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/">
+                        <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/"
+                        target="_new">
                         Creative Commons Attribution-ShareAlike 2.0 UK: England
                         & Wales Licence</a>. You are free to:
                         </p>
@@ -138,7 +142,9 @@
                             or similar licence to this one.</li>
                             <li>For any reuse or distribution, you must make
                             clear to others the licence terms of this work. The
-                            best way to do this is with a link to <a href="http://barefootintocyberspace.com/book/hypertext">
+                            best way to do this is with a link to
+                            <a href="http://barefootintocyberspace.com/book/hypertext"
+                            target="_new">
                             http://barefootintocyberspace.com/book/hypertext</a>
                             </li>
                         </ul>
@@ -148,51 +154,61 @@
                     <h1>Colophon</h1>
                     <img src="cover.png" alt="The Fluidinfo Cthulhu" style="float: right; margin-bottom: 10px;"/>
                     <p>This web-application was created by
-                    <a href="http://ntoll.org/about/">Nicholas H.Tollervey
-                    </a> (<a href="http://twitter.com/ntoll">@ntoll</a> on
-                    Twitter) over the first week in 2012. It's entirely
-                    written in Javascript and the source code is freely
-                    available
-                    <a href="https://github.com/ntoll/bookreader">here</a>.
+                    <a href="http://ntoll.org/about/" target="_new">Nicholas
+                    H.Tollervey</a>
+                    (<a href="http://twitter.com/ntoll">@ntoll</a> on
+                    Twitter) in the first week in 2012. It's entirely
+                    written in client-side Javascript and the source code is
+                    freely available
+                    <a href="https://github.com/ntoll/bookreader" target="_new">
+                    here</a>.
                     </p>
-                    <p>It makes use of the following Javascript libraries:</p>
+                    <p>It uses the following Javascript libraries:</p>
                     <ul>
-                        <li><a href="http://github.com/fluidinfo/fluidinfo.js">fluidinfo.js</a></li>
-                        <li><a href="https://github.com/janl/mustache.js">mustache.js</a></li>
-                        <li><a href="http://www.jstorage.info/">jStorage</a></li>
+                        <li><a href="http://github.com/fluidinfo/fluidinfo.js" target="_new">fluidinfo.js</a></li>
+                        <li><a href="https://github.com/janl/mustache.js" target="_new">mustache.js</a></li>
+                        <li><a href="http://www.jstorage.info/" target="_new">jStorage</a></li>
                     </ul>
                     <p>Styling is provided by
-                    <a href="http://twitter.github.com/bootstrap/">Bootstrap
-                    </a> and the feedback widget is from
-                    <a href="http://uservoice.com">Uservoice</a>.</p>
+                    <a href="http://twitter.github.com/bootstrap/"
+                    target="_new">Bootstrap</a> and the feedback widget is from
+                    <a href="http://uservoice.com" target="_new">Uservoice</a>.
+                    </p>
                     <h2>Getting Started with Fluidinfo</h2>
-                    <p>This website is a programming example in the
-                    <a href="http://oreilly.com">O'Reilly</a> book <em>Getting
-                    Started with Fluidinfo</em> (whose
-                    <a href="http://www.venganza.org/">Flying Spaghetti
-                    Monster</a> like cover animal is shown to the right). The
-                    design and implementation is explored in detail towards the
-                    end of the book. However, a summary is given briefly
+                    <p>This web-application is a programming example in the
+                    <a href="http://oreilly.com" target="_new">O'Reilly</a>
+                    book <em>Getting Started with Fluidinfo</em> (whose
+                    <a href="http://www.venganza.org/" target="_new">Flying
+                    Spaghetti Monster</a> like cover animal is shown to the
+                    right). The design and implementation is explored in detail
+                    towards the end of the book. However, a summary is given
                     below.</p>
 
-                    <p>Fluidinfo stores data on objects about things. In the
+                    <p>Fluidinfo is a <em>"social"</em> datastore based upon the
+                    simple concept of tagging things with useful information.
+                    Put simply, you tag data on objects about things. In the
                     case of this application, there are a set of objects in
                     Fluidinfo that represent each block of text in the work
                     that is <em>Barefoot into Cyberspace</em>. Each of these
-                    objects has a unique <em>about</em> value to identify it.
+                    objects has a unique <em>about</em> value tagged to it to
+                    identify it (using the special </em>fluiddb/about</em> tag).
                     For this application we've used about values that follow
                     this naming scheme:</p>
+
                     <pre> barefootintocyberspace:CHAPTER:POSITION </pre>
+
                     <p>Where <em>CHAPTER</em> and <em>POSITION</em> are replaced
-                    by a short name of the chapter and block number
-                    respectively. So the object whose about value is:</p>
+                    by a chapter's short name and block number respectively.
+                    For example, the object whose about value is:</p>
+
                     <pre> barefootintocyberspace:prologue:2 </pre>
+
                     <p>represents the second block of text in the
                     <em>prologue</em> chapter.</p>
 
                     <p>Each of these objects will have at least the following
                     six tags and associated values (in addition to the
-                    <em>fluiddb/about</em> tag):</p>
+                    <em>fluiddb/about</em> tag that identifies it):</p>
                     <dl>
                         <dt>beckyhogge/html</dt>
                         <dd>The HTML content of the block represented by the
@@ -200,49 +216,55 @@
                         <dt>beckyhogge/licence</dt>
                         <dd>A link to the block's licence. </dd>
                         <dt>beckyhogge/work</dt>
-                        <dd>The about value of the object representing the
-                        whole work that is <em>Barefoot into Cyberspace</em>.
+                        <dd>A reference to the object about the work that is
+                        <em>Barefoot into Cyberspace</em>.
                         </dd>
                         <dt>beckyhogge/parent</dt>
-                        <dd>The parent block (chapter) of the block represented
-                        by the object.</dd>
+                        <dd>A reference to the block's parent object (usually
+                        the block's chapter).</dd>
                         <dt>beckyhogge/position</dt>
-                        <dd>The position of the block within the order of the
-                        parent block.</dd>
+                        <dd>The position of the block within its parent block.
+                        </dd>
                         <dt>beckyhogge/references</dt>
-                        <dd>Any references contained within the block.</dd>
+                        <dd>A list of any references contained within the block.
+                        </dd>
                     </dl>
                     <p>When someone creates an annotation a <em>comment</em>
-                    tag is attached to the object representing the appropriate
-                    block of text. The associated value is a string containing
-                    a list of one or more comments. Comments are deliniated by
-                    the &#182; (Pilcrow) character like this:</p>
+                    tag is attached to the object representing the block of
+                    text. The associated value is a string containing a list of
+                    one or more comments. Comments are deliniated by the &#182;
+                    (Pilcrow) character like this:</p>
+
                     <pre>Fri, 13 Jan 2012 21:50:57 GMT
 Comment 1
 &#182;
 Fri, 13 Jan 2012 21:51:01 GMT
 Comment 2</pre>
+
                     <p>Each comment starts with its creation time expressed as
                     a human and machine readable version of universal time. The
                     comment starts on the next line until the pilcrow is
                     reached.</p>
+
                     <p>This way of storing comments has several benefits:</p>
+
                     <ul>
                         <li>Re-use of the <em>comment</em> tag convention.
                         </li>
                         <li>Comments are searchable with the
-                        <em>matches</em> keyword in the Fluidinfo query
+                        <em>matches</em> keyword in Fluidinfo's query
                         language.</li>
                         <li>Comments are both human and machine readable.
                         </li>
                         <li>It's very very simple (keep it simple stupid).</li>
                     </ul>
-                    <p>Please use the feedback link on the left hand side of
-                    this page to ask questions. If you would like to report a
-                    bug or request a feature then visit the project's
-                    <a href="https://github.com/ntoll/bookreader/issues">
+
+                    <p>Use the feedback link at the top of this page to
+                    ask questions. To report a bug or request
+                    a feature visit the project's
+                    <a href="https://github.com/ntoll/bookreader/issues" target="_new">
                     homepage on Github</a>.</p>
-                    <p>Alternatively, fork the project and buildy something
+                    <p>Alternatively, fork the project and build something
                     amazing.</p>
                     <p>Comments, suggestions and critique are most welcome!</p>
                 </div>
@@ -255,17 +277,21 @@ Comment 2</pre>
                     <img src="CyberDoI.png" alt="Wordle: http://www.wordle.net/show/wrdl/4647255/DeclarationOfCyberIndependence" style="width:841px; margin-left: auto; margin-right: auto;"/>
 
                     <p>As the <a href="#" class="about">about page</a> states,
-                    this is a simple web-application that allows you to
-                    contribute annotations to
-                    <a href="http://barefootintocyberspace.com/about/">
-                    Becky Hogge's</a> book <a href="http://barefootintocyberspace.com/book/hypertext/"><em>Barefoot into Cyberspace</em></a>.
-                    Furthermore, you get to see what others have annotated (each
-                    block of text has an associated timeline of comments). As
-                    a result, this application turns the book <em>Barefoot into
-                    Cyberspace</em> into an evolving collaboration.</p>
+                    this simple web-application allows you to contribute
+                    annotations to
+                    <a href="http://barefootintocyberspace.com/about/"
+                    target="_new">Becky Hogge's</a> book
+                    <a href="http://barefootintocyberspace.com/book/hypertext/"
+                    target="_new"><em>Barefoot into Cyberspace</em></a>.</p>
+
+                    <p>Furthermore, you get to see what others have annotated
+                    (each block of text has an associated timeline of comments).
+                    As a result, this application turns <em>"Barefoot"</em>
+                    into an evolving collaboration of annotations coalescing
+                    around the original work.</p>
 
                     <p>To read a chapter click the "Contents" link at the top
-                    of this page and select the chapter you wish to read.
+                    of this page and make a selection.
                     When reading a chapter click on the tag icons next to each
                     block of text to see the annotations people have left
                     (see the image below). If there is a number next to the tag
@@ -279,9 +305,9 @@ Comment 2</pre>
                     When you click these a pop-over will appear with the
                     relevent reference displayed inside. Try it now by clicking
                     <a href="#" id="examplePopover">this link</a> (clicking the
-                    link again hides the popup). At the bottom of each chapter
-                    are two buttons (<em>Previous</em> and <em>Next</em>) whose
-                    function is to allow you to move between chapters easily.
+                    link again hides the popup). At the bottom of each page
+                    are two buttons (<em>Previous</em> and <em>Next</em>) that
+                    allow you to move easily between chapters.
                     </p>
 
                     <hr/>
@@ -292,33 +318,39 @@ Comment 2</pre>
 
                     <p>What you may not know is that this application is also
                     a programming example in a book about the openly writeable
-                    data store <a href="http://fluidinfo.com">Fluidinfo</a>. The
-                    book's title is <em>Getting Started with Fluidinfo</em> and
-                    it's published by <a href="http://oreilly.com">O'Reilly</a>.
+                    data store <a href="http://fluidinfo.com"
+                    target="_new">Fluidinfo</a>. <em>Getting Started with
+                    Fluidinfo</em> is published by <a href="http://oreilly.com"
+                    target="_new">O'Reilly</a>. Technical details for this
+                    application are explained in the <a href="#colophon"
+                    class="colophon">colophon</a>.
                     </p>
 
                     <p>In order to contribute annotations
-                    you need to have an account on Fluidinfo. Sign up at
-                    <a href="https://fluidinfo.com/accounts/new/">Fluidinfo's
-                    account creation page</a>, return here and then sign in
-                    with your username and password by clicking the
-                    <em>login</em>
-                    link at the top right hand side of this page.</p>
+                    you need to have a Fluidinfo account. Sign up at
+                    <a href="https://fluidinfo.com/accounts/new/"
+                    target="_new">Fluidinfo's account creation page</a>. Make
+                    sure you <strong>don't sign up using Twitter</strong>.
+                    Return here and sign in with your username and password by
+                    clicking the <em>login</em> link at the top right hand side
+                    of this page.</p>
 
                     <p>Once logged in you'll notice that when you display the
                     annotations there is also an <em>Annotate this!</em> button
-                    to display a form. Click the "Submit" button to add an
-                    annotation. When any of your annotations are displayed they
-                    will have a <em>delete</em> link next to them. Clicking it
-                    obviously removes the annotation. You can annotate as many
-                    times as you like on any number of blocks of text.</p>
+                    that displays a form. Click the "Submit" button to add an
+                    annotation. Your annotations will have a <em>delete</em>
+                    link next to them. Clicking it removes the annotation. You
+                    can annotate as many times as you like on any number of
+                    blocks of text.</p>
 
-                    <p>You can submit feedback about this application (not the
-                    work <em>Barefoot into Cyberspace</em> itself) at any time
-                    by clicking on the "feedback" link on the left hand side of
-                    the screen.</p>
+                    <p>Submit feedback about this application (not the
+                    work <em>Barefoot into Cyberspace</em>) at any time
+                    by clicking on the
+                    <a href="javascript:UserVoice.showPopupWidget();"
+                    title="Open the feedback widget">feedback</a>
+                    link at the top of the screen.</p>
 
-                    <p>That's it and have fun!</p>
+                    <p>That's it and have fun! :-)</p>
 
                 </div>
                 <div id="chapter" style="display: none;" class="row"></div>
@@ -350,7 +382,8 @@ Comment 2</pre>
                             </div>
                         </div>
                         <div class="clearfix">
-                            <p class="input">(<a href="https://fluidinfo.com/accounts/new" target="_new">Create a new Fluidinfo account</a>)</p>
+                            <p class="input"><a href="https://fluidinfo.com/accounts/new" target="_new">Create a new Fluidinfo account.</a></p>
+                            <p class="input"><a href="https://fluidinfo.com/accounts/password_reset/" target="_new">Oops, I forgot my password!</a></p>
                         </div>
                     </fieldset>
             </div>

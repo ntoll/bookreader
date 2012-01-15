@@ -370,7 +370,7 @@ var bookreader = function() {
         if(comments.indexOf(splitChar)<0){
             return [{author: author,
                     timestamp: new Date(0),
-                    val: commentString,
+                    val: comments,
                     about: about
                     }];
         }
@@ -451,9 +451,17 @@ var bookreader = function() {
     var createAnnotation = function(annotation){
         var uniqueID = uuid();
         var template = '<div style="border-bottom: 1px solid #EEE; margin-bottom: 10px; padding-bottom: 10px;" id="{{id}}"><div><strong>{{author}}</strong> - {{date}} {{#delete}}<a class="deleteAnnotation" href="#"><small>delete</small></a>{{/delete}}</div><div>{{val}}</div></div>';
-        annotation["id"] = uniqueID;
-        annotation["date"] = annotation.timestamp.toDateString();
+        annotation.id = uniqueID;
+        // Check for unknown dates (represented by timestamp 0)
+        if(annotation.timestamp.valueOf() === new Date(0).valueOf()) {
+            annotation.date = "Unknown date";
+        } else {
+            annotation.date = annotation.timestamp.toDateString();
+        }
         annotation["delete"] = annotation.author === session.username;
+        if(annotation.val.length === 0) {
+            annotation.val = "Empty comment";
+        }
         var result = $(Mustache.to_html(template, annotation));
         // Add a delete event handler
         var deleteAnchor = result.find(".deleteAnnotation");
