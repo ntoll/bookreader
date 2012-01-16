@@ -253,7 +253,7 @@ var bookreader = function() {
     var getChapter = function(e) {
         contentBlocks.hide();
         showWorking();
-        var chapterHash = e.srcElement.hash.replace("#", "");
+        var chapterHash = e.target.hash.replace("#", "");
         var chapterName = "barefootintocyberspace:" + chapterHash;
         var onSuccess = function(result) {
             // order the results
