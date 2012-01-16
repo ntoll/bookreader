@@ -251,6 +251,7 @@ var bookreader = function() {
     Given a click event, will get and display the selected chapter.
     */
     var getChapter = function(e) {
+        $(".popover").remove();
         contentBlocks.hide();
         showWorking();
         var chapterHash = e.target.hash.replace("#", "");
@@ -315,6 +316,7 @@ var bookreader = function() {
     Displays the about page (the first thing the user sees).
     */
     var showAbout = function(){
+        $(".popover").remove();
         contentBlocks.hide();
         about.fadeIn("fast");
         return false;
@@ -324,6 +326,7 @@ var bookreader = function() {
     Displays the colophon page (containing technical details).
     */
     var showColophon = function(){
+        $(".popover").remove();
         contentBlocks.hide();
         colophon.fadeIn("fast");
         return false;
@@ -333,6 +336,7 @@ var bookreader = function() {
     Displays the help page.
     */
     var showHelp = function(){
+        $(".popover").remove();
         contentBlocks.hide();
         help.fadeIn("fast");
         return false;
