@@ -584,13 +584,19 @@ var bookreader = function() {
                     commentTags.push(tag);
                 }
             }
-            var tagValOptions = {
-                about: aboutBlock,
-                select: commentTags,
-                onSuccess: showComments,
-                onError: onAnnotateError
+            if(commentTags.length > 1) {
+                // only make the request if there are matching tag.
+                var tagValOptions = {
+                    about: aboutBlock,
+                    select: commentTags,
+                    onSuccess: showComments,
+                    onError: onAnnotateError
+                }
+                session.getObject(tagValOptions);
+            } else {
+                // there were no matching tags so fake an empty result.
+                showComments({data:[]});
             }
-            session.getObject(tagValOptions);
         }
         session.api.get({
             path: "about/"+aboutBlock,
