@@ -1,6 +1,6 @@
 [submodule "js/fi"]
 	path = js/fi
-	url = git@github.com:fluidinfo/fluidinfo.js.git
+	url = https://github.com/fluidinfo/fluidinfo.js.git
 [submodule "js/mustache"]
 	path = js/mustache
 	url = https://github.com/janl/mustache.js.git
