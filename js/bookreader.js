@@ -25,6 +25,23 @@ var bookreader = function() {
     // Used to match tag paths
     var commentMatcher = new RegExp("^\\w+\\/"+commentTag+"$");
 
+    // Ordered list of chapters
+    var chapterList = [
+        "prologue",
+        "command",
+        "courage",
+        "information",
+        "kids",
+        "anarchists",
+        "overload",
+        "goolag",
+        "ciphers",
+        "infowar",
+        "epilogue",
+        "acknowledgements",
+        "glossary"
+    ];
+
     // Various DOM elements that need to be referenced
     var contentBlocks = $(".row");
     var about = $("#about");
@@ -175,22 +192,6 @@ var bookreader = function() {
     at the bottom of the screen.
     */
     var showNavButtons = function(chapter) {
-        // Ordered list of chapters
-        var chapterList = [
-            "prologue",
-            "command",
-            "courage",
-            "information",
-            "kids",
-            "anarchists",
-            "overload",
-            "goolag",
-            "ciphers",
-            "infowar",
-            "epilogue",
-            "acknowledgements",
-            "glossary"
-        ];
         var i;
         var previous;
         var next;
@@ -319,7 +320,6 @@ var bookreader = function() {
         $(".popover").remove();
         contentBlocks.hide();
         about.fadeIn("fast");
-        return false;
     };
 
     /*
@@ -329,7 +329,6 @@ var bookreader = function() {
         $(".popover").remove();
         contentBlocks.hide();
         colophon.fadeIn("fast");
-        return false;
     };
 
     /*
@@ -339,7 +338,6 @@ var bookreader = function() {
         $(".popover").remove();
         contentBlocks.hide();
         help.fadeIn("fast");
-        return false;
     };
 
     /*
@@ -727,6 +725,29 @@ var bookreader = function() {
             }
             return false;
         });
+
+        var hash = document.location.hash;
+        if(hash) {
+            var i;
+            var hashName = hash.replace("#", "");
+            for(i=0; i<chapterList.length; i++){
+                if(hashName === chapterList[i]){
+                    getChapter({target: {hash: hash}});
+                    return;
+                }
+            }
+            switch(hash){
+                case "#about":
+                    showAbout();
+                    break;
+                case "#colophon":
+                    showColophon();
+                    break;
+                case "#help":
+                    showHelp();
+                    break;
+            };
+        }
     };
 
     return result;
