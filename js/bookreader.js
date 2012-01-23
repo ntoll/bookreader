@@ -42,11 +42,58 @@ var bookreader = function() {
         "glossary"
     ];
 
+    // An object that defines how to process embedded links when displaying
+    // comments.
+    var embeddedLinks = {
+        "youtube.com": function(raw) {
+            var regex = /v=[a-zA-Z0-9]+/;
+            var match = raw.match(regex);
+            var template= '<object width="480" height="244"><param name="movie" value="http://www.youtube.com/v/{{id}}?version=3&rel=0&enablejsapi=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{{id}}?version=3&rel=0&enablejsapi=1" type="application/x-shockwave-flash" width="480" height="244" allowscriptaccess="always" allowfullscreen="true"></embed></object>'
+            if(match){
+                var id = match[0].replace("v=", "");
+                return Mustache.to_html(template, {id: id});
+            } else {
+                return "";
+            }
+        },
+        "vimeo.com": function(raw) {
+            var regex = /vimeo.com\/[0-9]+$/g;
+            var match = raw.match(regex);
+            var template = '<object width="325" height="244"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id={{id}}&server=vimeo.com&show_title=0&show_byline=0&show_portrait=0&color=00adef&fullscreen=1&autoplay=0&loop=0" /><embed src="http://vimeo.com/moogaloop.swf?clip_id={{id}}&server=vimeo.com&show_title=0&show_byline=0&show_portrait=0&color=00adef&fullscreen=1&autoplay=0&loop=0" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="325" height="244"></embed></object>';
+            if(match){
+                var id = match[0].replace("vimeo.com/", "");
+                return Mustache.to_html(template, {id: id});
+            } else {
+                return "";
+            }
+        },
+        "twitpic.com": function(raw) {
+            var regex = /twitpic.com\/[\w]+$/g;
+            var match = raw.match(regex);
+            var template = '<img src="http://twitpic.com/show/full/{{id}}" alt="Twitpic image {{id}}" style="max-width: 400px;"/>';
+            if(match){
+                var id = match[0].replace("twitpic.com/", "");
+                return Mustache.to_html(template, {id: id});
+            } else {
+                return "";
+            }
+        },
+        "yfrog.com": function(raw) {
+            var template = '<img src="{{url}}" alt="yfrog image" style="max-width: 400px;"/>';
+            return Mustache.to_html(template, {url: raw+":medium"});
+        },
+        "soundcloud.com": function(raw) {
+            var template = '<object height="81" width="100%" id="{{id}}" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"><param name="movie" value="http://player.soundcloud.com/player.swf?url={{url}}&enable_api=true&object_id=yourPlayerId"></param><param name="allowscriptaccess" value="always"></param> <embed allowscriptaccess="always" height="81" src="http://player.soundcloud.com/player.swf?url={{url}}&enable_api=true&object_id=yourPlayerId" type="application/x-shockwave-flash" width="100%" name="{{id}}"></embed> </object>';
+            var id = uuid();
+            return Mustache.to_html(template, {url: encodeURIComponent(raw), id: id});
+        }
+    };
+
     // Various DOM elements that need to be referenced
     var contentBlocks = $(".row");
-    var about = $("#about");
-    var colophon = $("#colophon");
-    var help = $("#help");
+    var about = $("#aboutContainer");
+    var colophon = $("#colophonContainer");
+    var help = $("#helpContainer");
     var examplePopover = $("#examplePopover");
     var oops = $("#oops");
     var working = $("#working");
@@ -320,6 +367,8 @@ var bookreader = function() {
         $(".popover").remove();
         contentBlocks.hide();
         about.fadeIn("fast");
+        document.location.hash = "#about";
+        return false;
     };
 
     /*
@@ -329,6 +378,8 @@ var bookreader = function() {
         $(".popover").remove();
         contentBlocks.hide();
         colophon.fadeIn("fast");
+        document.location.hash = "#colophon";
+        return false;
     };
 
     /*
@@ -338,6 +389,8 @@ var bookreader = function() {
         $(".popover").remove();
         contentBlocks.hide();
         help.fadeIn("fast");
+        document.location.hash = "#help";
+        return false;
     };
 
     /*
@@ -447,12 +500,76 @@ var bookreader = function() {
         session.tag(tagOptions);
     };
 
+    var postProcessComment = function(raw) {
+        if(raw.length === 0) {
+            return "<emphasis>Empty comment.</emphasis>";
+        }
+        var htmlSafe = Mustache.to_html("{{raw}}", {raw: raw});
+        htmlSafe = htmlSafe.replace(/\n/g, "<br/>");
+        // Check for URLs in the content
+        var urlRe = /(https?):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]*[-A-Za-z0-9+&@#/%=~_|]/g;
+        var match = htmlSafe.match(urlRe);
+        // mediaList will contain any linked media to be embedded into the
+        // value of the comment.
+        var mediaList = [];
+        if(match){
+            var i;
+            for(i=0; i<match.length; i++) {
+                var url = match[i];
+                // replace with anchor element
+                var urlName = url.replace("http://", "");
+                if(urlName.length>32){
+                    urlName = url.slice(0, 32)+"...";
+                }
+                var a_template = '<a href="{{url}}" target="_new">{{urlName}}</a>';
+                var anchor = Mustache.to_html(a_template, {url: url, urlName: urlName});
+                htmlSafe = htmlSafe.replace(url, anchor);
+                // add media to bottom of comment if from Youtube etc...
+                var service;
+                for(service in embeddedLinks){
+                    var func = embeddedLinks[service];
+                    var serviceMatch = url.match(new RegExp(service));
+                    if(serviceMatch) {
+                        mediaList.push(func(url));
+                        break;
+                    }
+                }
+            }
+        }
+        var mediaContainer = null;
+        if(mediaList.length>0) {
+            // Post process the media
+            var mediaTemplate = '<div id="{{viewID}}"><a href="#">View media</a></div><div id="{{mediaID}}" style="display: none;"><p><a href="#" id="{{mediaID}}-toggle">Hide media</a></p><div id="{{mediaID}}-content"></div></div>';
+            var viewID = uuid();
+            var mediaID = uuid();
+            var mediaContainer = $(Mustache.to_html(mediaTemplate, {viewID: viewID, mediaID: mediaID}));
+            var viewDiv = mediaContainer.first();
+            var mediaDiv = mediaContainer.last();
+            viewDiv.find("a").click(function(){
+                viewDiv.hide();
+                mediaDiv.fadeIn("fast");
+                return false;
+            });
+            mediaDiv.find("#"+mediaID+"-toggle").click(function(){
+                mediaDiv.hide();
+                viewDiv.fadeIn("fast");
+                return false;
+            });
+            var i;
+            for(i=0; i< mediaList.length; i++) {
+                var media = mediaList[i];
+                mediaDiv.append($(media));
+            }
+        }
+        return $("<div/>").html(htmlSafe).append(mediaContainer);
+    };
+
     /*
     Returns an appropriately rendered element to insert into the DOM.
     */
     var createAnnotation = function(annotation){
         var uniqueID = uuid();
-        var template = '<div style="border-bottom: 1px solid #EEE; margin-bottom: 10px; padding-bottom: 10px;" id="{{id}}"><div><strong>{{author}}</strong> - {{date}} {{#delete}}<a class="deleteAnnotation" href="#"><small>delete</small></a>{{/delete}}</div><div>{{val}}</div></div>';
+        var template = '<div style="border-bottom: 1px solid #EEE; margin-bottom: 10px; padding-bottom: 10px;" id="{{id}}"><div><strong>{{author}}</strong> - {{date}} {{#delete}}<a class="deleteAnnotation" href="#"><small>delete</small></a>{{/delete}}</div></div>';
         annotation.id = uniqueID;
         // Check for unknown dates (represented by timestamp 0)
         if(annotation.timestamp.valueOf() === new Date(0).valueOf()) {
@@ -464,10 +581,9 @@ var bookreader = function() {
             });
         }
         annotation["delete"] = annotation.author === session.username;
-        if(annotation.val.length === 0) {
-            annotation.val = "Empty comment";
-        }
+        var valueElement = postProcessComment(annotation.val);
         var result = $(Mustache.to_html(template, annotation));
+        result.append(valueElement);
         // Add a delete event handler
         var deleteAnchor = result.find(".deleteAnnotation");
         deleteAnchor.click(function(e){

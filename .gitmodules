@@ -7,3 +7,6 @@
 [submodule "js/jstorage"]
 	path = js/jstorage
 	url = https://github.com/andris9/jStorage
+[submodule "js/soundcloud"]
+	path = js/soundcloud
+	url = https://github.com/soundcloud/Widget-JS-API.git

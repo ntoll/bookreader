@@ -19,6 +19,7 @@
         <script type="text/javascript" src="js/mustache/mustache.js"></script>
         <script type="text/javascript" src="js/fi/fluidinfo.js"></script>
         <script type="text/javascript" src="js/jstorage/jstorage.min.js"></script>
+        <script type="text/javascript" src="js/soundcloud/soundcloud.player.api.js"></script>
         <script type="text/javascript" src="js/bookreader.js"></script>
         <style>
         .textBlock p, .textBlock dt{
@@ -31,6 +32,19 @@
             font-size: 60px;
             font-weight: normal;
             line-height: 1.5;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
         }
         </style>
     </head>
@@ -94,7 +108,7 @@
                     <div id="errorMessage">
                     </div>
                 </div>
-                <div class="row" id="about">
+                <div class="row" id="aboutContainer">
                     <div class="span7">
                         <img src="barefootintocyberspacebeckyhogge.jpg" alt="Barefoot into Cyberspace" style="float: left; width: 400px;">
                     </div>
@@ -150,7 +164,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="row" style="display: none;" id="colophon">
+                <div class="row" style="display: none;" id="colophonContainer">
                     <div class="span14 offset1">
                     <h1>Colophon</h1>
                     <img src="cover.png" alt="The Fluidinfo Cthulhu" style="float: right; margin-bottom: 10px;"/>
@@ -270,7 +284,7 @@ Comment 2</pre>
                     <p>Comments, suggestions and critique are most welcome!</p>
                     </div>
                 </div>
-                <div id="help" style="display: none;" class="row">
+                <div id="helpContainer" style="display: none;" class="row">
                     <div class="span14 offset1">
                     <h1>Using this Application</h1>
                     <p>Well done, you've found the help page. This proves that
@@ -297,8 +311,16 @@ Comment 2</pre>
                     of this page and make a selection.
                     When reading a chapter click on the tag icons next to each
                     block of text to see the annotations people have left
-                    (see the image below). If there is a number next to the tag
-                    it indicates the <strong>number of participants</strong>
+                    (see the image below). If a user has referenced a URL it
+                    will automatically become a link. If the link is to either
+                    <a href="http://youtube.com/">YouTube</a>,
+                    <a href="http://vimeo.com/">Vimeo</a>,
+                    <a href="http://twitpic.com/">TwitPic</a>,
+                    <a href="http://yfrog.com/">yFrog</a> or
+                    <a href="http://soundcloud.com/">SoundCloud</a> then the
+                    referenced media will be displayed if you click the
+                    <em>View media</em> link. If there is a number next to the
+                    tag it indicates the <strong>number of participants</strong>
                     annotating the specific block of text (<strong>not the
                     total number of comments</strong>). Click the "close"
                     button to dismiss the annotations and return to reading the
@@ -340,7 +362,11 @@ Comment 2</pre>
 
                     <p>Once logged in you'll notice that when you display the
                     annotations there is also an <em>Annotate this!</em> button
-                    that displays a form. Click the "Submit" button to add an
+                    that displays a form. Remember that any URLs referenced in
+                    the comment automatically become links and if the URL is to
+                    one of the video/photo/sound-sharing websites listed earlier
+                    then the bookreader will display it as a preview. Click
+                    the "Submit" button to add an
                     annotation. Your annotations will have a <em>delete</em>
                     link next to them. Clicking it removes the annotation. You
                     can annotate as many times as you like on any number of
@@ -441,7 +467,7 @@ Comment 2</pre>
                 <div id="fetchingCommentTags" class="alert-message info" style="display:none;">
                     <p>Communicating with Fluidinfo... <img src="working.gif" alt="Working..."/></p>
                 </div>
-                <div id="commentTagValues" style="display:none; max-height:260px; overflow: auto;">
+                <div id="commentTagValues" style="display:none; max-height:320px; overflow: auto;">
                 </div>
             </div>
             <div class="modal-footer">
