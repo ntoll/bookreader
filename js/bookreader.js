@@ -82,6 +82,14 @@ var bookreader = function() {
             var template = '<img src="{{url}}" alt="yfrog image" style="max-width: 400px;"/>';
             return Mustache.to_html(template, {url: raw+":medium"});
         },
+        "(\\.png|\\.gif|\\.jpg)$": function(raw) {
+            var template = '<img src="{{url}}" alt="yfrog image" style="max-width: 400px;"/>';
+            return Mustache.to_html(template, {url: raw});
+        },
+        "(\\.ogg|\\.mp3)$": function(raw) {
+            var template = '<audio controls><source src="{{url}}"/></audio>';
+            return Mustache.to_html(template, {url: raw});
+        },
         "soundcloud.com": function(raw) {
             var template = '<object height="81" width="100%" id="{{id}}" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"><param name="movie" value="http://player.soundcloud.com/player.swf?url={{url}}&enable_api=true&object_id=yourPlayerId"></param><param name="allowscriptaccess" value="always"></param> <embed allowscriptaccess="always" height="81" src="http://player.soundcloud.com/player.swf?url={{url}}&enable_api=true&object_id=yourPlayerId" type="application/x-shockwave-flash" width="100%" name="{{id}}"></embed> </object>';
             var id = uuid();
