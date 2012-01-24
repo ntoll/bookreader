@@ -32,6 +32,25 @@ root of this project and type::
 
 (The dollar "$" represents the terminal prompt. You don't have to type this.)
 
+Running the Test Suite
+----------------------
+
+The test-suite uses Selenium (http://seleniumhq.org/), Python and Firefox.
+Assuming you have Python and Firefox installed already it's possible to install
+Selenium with the following command::
+
+    $ pip install selenium
+
+You should then start the local server (as described above) then switch to
+another terminal window and run the test suite::
+
+    $ python test/run.py
+
+An instance of the Firefox browser will launch (under the control of Selenium)
+and the progress of the test suite will be displayed in the terminal window.
+Since, this is a "live" test with real network calls the time the test suite
+takes to complete depends upon the latency of your network connection.
+
 Project Geography
 -----------------
 
