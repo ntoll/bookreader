@@ -320,7 +320,7 @@ var bookreader = function() {
             // add them to the DOM
             chapter.empty();
             var i;
-            var template = '<div style="margin-bottom: 18px;" class="span11 offset2 textBlock">{{{block}}}</div><div class="span3"><a href="annotate" class="tagLink"><img src="tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}"><small style="color: #999;">&nbsp;</small></span></div>';
+            var template = '<div style="margin-bottom: 18px;" class="span11 offset2 textBlock">{{{block}}}</div><div class="span3"><a href="annotate" class="tagLink"><img src="images/tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}"><small style="color: #999;">&nbsp;</small></span></div>';
             for(i=0; i<orderedBlocks.length; i++){
                 block = orderedBlocks[i];
                 var id = block["id"];

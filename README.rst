@@ -28,7 +28,7 @@ the application on ``http://localhost:8080`` (you'll need to have Python
 installed for this to work). To make it work open a terminal, navigate to the
 root of this project and type::
 
-    $ ./runserver.py
+    $ ./scripts/runserver.py
 
 (The dollar "$" represents the terminal prompt. You don't have to type this.)
 
@@ -39,5 +39,5 @@ This is a very simple project with few dependencies. All the HTML is contained
 within the ``index.html`` file. The application logic is contained within the
 ``js/bookreader.js`` file. I sourced the content from
 http://barefootintocyberspace.com/book/hypertext/ and scraped it into the file
-``barefoot.json``. This project is released under a FLOSS license (see
+``data/barefoot.json``. This project is released under a FLOSS license (see
 the ``LICENSE`` file) so please fork it and adapt to your purposes.
