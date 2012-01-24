@@ -403,6 +403,10 @@ Comment 2</pre>
             </div>
             <form id="loginForm" style="margin-bottom: 0px">
             <div class="modal-body">
+                <div class="alert-message error" id="loginFormError" style="display: none;" data-alert="alert">
+                    <p><strong>Try again!</strong> You must supply both a
+                    username and password.</p>
+                </div>
                 <fieldset>
                         <legend>Enter your Fluidinfo username and password</legend>
                         <div class="clearfix">
@@ -440,6 +444,10 @@ Comment 2</pre>
                         <button class="btn primary" id="annotateButton">
                         Annotate this!
                         </button>
+                    </div>
+                    <div class="alert-message error" id="newCommentFormError" style="display: none;" data-alert="alert">
+                        <p><strong>Try again!</strong> You must enter
+                            something to annotate!</p>
                     </div>
                     <form id="newCommentForm" class="form-stacked" style="display:none;">
                         <fieldset>

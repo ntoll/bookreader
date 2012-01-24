@@ -152,7 +152,7 @@ var bookreader = function() {
         $("#passwordInput").attr("value", "");
         // Validate username and password
         if(username === "" || password === "") {
-            alert("You must enter both a valid username and password.");
+            $("#loginFormError").fadeIn("fast");
             $("#usernameInput").focus();
             return false;
         }
@@ -166,6 +166,7 @@ var bookreader = function() {
         $("#username").html(escape(username));
         userInfo.fadeIn();
         loginForm.modal("hide");
+        $("#loginFormError").hide();
         return false;
     };
 
@@ -746,11 +747,12 @@ var bookreader = function() {
         submitAnnotation.button("loading");
         newCommentContent.attr("disabled", "disabled");
         cancelAnnotation.attr("disabled", "disabled");
+        $("#newCommentFormError").hide();
         // Validate the input.
         var rawInput = newCommentContent[0].value;
         var strippedInput = rawInput.replace(/^\s*/, "").replace(/\s*$/, "");
         if(strippedInput === "") {
-            alert("You must enter something to annotate!");
+            $("#newCommentFormError").fadeIn("fast");
             resetAnnotationForm();
             newCommentContent.focus();
             return false;
@@ -793,7 +795,8 @@ var bookreader = function() {
     Initialises the DOM and sets everything up.
     */
     result.init = function(){
-        $('#topbar').dropdown();
+        $("#topbar").dropdown();
+        $(".alert-message").alert();
         aboutLinks.click(showAbout);
         colophonLinks.click(showColophon);
         helpLinks.click(showHelp);
@@ -804,6 +807,7 @@ var bookreader = function() {
             backdrop: "static"
         });
         $("#cancelLogin").click(function(){
+            $("#loginFormError").hide();
             loginForm.modal("hide");
         });
         $("#closeAnnotations").click(function(){
@@ -813,7 +817,7 @@ var bookreader = function() {
         });
         loginLink.click(showLogin);
         logoutLink.click(logout);
-        loginForm.submit(login);
+        loginForm.unbind('submit').submit(login);
         $(".chapterLink").click(getChapter);
         previousLink.click(getChapter);
         nextLink.click(getChapter);
@@ -823,10 +827,11 @@ var bookreader = function() {
             newCommentContent.focus();
         });
         cancelAnnotation.click(function(){
+            $("#newCommentFormError").hide();
             newCommentForm.hide();
             annotateButton.fadeIn(50);
         });
-        newCommentForm.submit(addAnnotation);
+        newCommentForm.unbind("submit").submit(addAnnotation);
         examplePopover.popover({
             placement: "below",
             html: true,
