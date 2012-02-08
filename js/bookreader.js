@@ -114,6 +114,9 @@ var bookreader = function() {
     var loginInfo = $("#loginInfo");
     var userInfo = $(".userInfo");
     var loginForm = $("#loginForm");
+    var loginFormContainer = $("#loginFormContainer");
+    var loginFormError = $("#loginFormError");
+    var submitLoginForm = $("#loginFormSubmit");
     var annotations = $("#annotations");
     var annotateButton = $("#annotateButton");
     var newCommentForm = $("#newCommentForm");
@@ -152,21 +155,48 @@ var bookreader = function() {
         $("#passwordInput").attr("value", "");
         // Validate username and password
         if(username === "" || password === "") {
-            $("#loginFormError").fadeIn("fast");
-            $("#usernameInput").focus();
+            loginFormError.html("<p><strong>Try again!</strong> You must supply both a username and password.</p>");
+            loginFormError.show();
             return false;
         }
+        submitLoginForm.button("loading");
+        submitLoginForm.button("toggle");
+        var onSuccess = function(response){
+            submitLoginForm.button("toggle");
+            submitLoginForm.button("reset");
+            fluidinfoUsername = username;
+            fluidinfoAvatarURL = "images/unknown.png";
+            $.jStorage.set("u", username);
+            $.jStorage.set("p", password);
+            loginInfo.hide();
+            userInfo.fadeIn("fast");
+            $("#username").html(escape(username));
+            $("#session").show();
+            loginFormContainer.modal("hide");
+            loginFormError.hide();
+        };
+        var onError = function(result){
+            session = fluidinfo({});
+            submitLoginForm.button("reset");
+            submitLoginForm.button("toggle");
+            fluidinfoUsername = undefined;
+            fluidinfoAvatarURL = undefined;
+            $.jStorage.deleteKey("u");
+            $.jStorage.deleteKey("p");
+            $("#session").hide();
+            loginInfo.show();
+            loginFormError.html("<p><strong>Try again!</strong> The username and password you supplied don't work.</p>");
+            loginFormError.show();
+        };
         session = fluidinfo({
             username: username,
             password: password
         });
-        $.jStorage.set('u', username);
-        $.jStorage.set('p', password);
-        loginInfo.hide();
-        $("#username").html(escape(username));
-        userInfo.fadeIn();
-        loginForm.modal("hide");
-        $("#loginFormError").hide();
+        session.api.get({
+            path: ["users", username],
+            onSuccess: onSuccess,
+            onError: onError
+        });
         return false;
     };
 
@@ -193,7 +223,7 @@ var bookreader = function() {
             msg += "<dt>"+header+"</dt>";
             msg += "<dd>"+result.headers[header]+"</dd>";
         }
-        msg += "</dl><p>If this problem persists please use the feedback link on the left hand side of this web-page.</p>";
+        msg += "</dl><p>If this problem persists please use the feedback link at the top of this web-page.</p>";
         $("#errorMessage").html(msg);
         oops.fadeIn("slow");
     };
@@ -321,7 +351,7 @@ var bookreader = function() {
             // add them to the DOM
             chapter.empty();
             var i;
-            var template = '<div style="margin-bottom: 18px;" class="span11 offset2 textBlock">{{{block}}}</div><div class="span3"><a href="annotate" class="tagLink"><img src="images/tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}"><small style="color: #999;">&nbsp;</small></span></div>';
+            var template = '<div style="margin-bottom: 18px;" class="span11 offset2 textBlock">{{{block}}}</div><div class="span3"><a href="annotate" class="tagLink"><img src="images/tags.png" alt="tag" style="opacity: 0.6; filter: alpha(opacity=0.6); vertical-align: middle"/></a><span style="margin-bottom: 4px; color: #999;" id="{{id}}" class="participantCount"><small style="color: #999;">&nbsp;</small></span></div>';
             for(i=0; i<orderedBlocks.length; i++){
                 block = orderedBlocks[i];
                 var id = block["id"];
@@ -414,7 +444,7 @@ var bookreader = function() {
     Displays the login widget.
     */
     var showLogin = function(){
-        loginForm.modal("show");
+        loginFormContainer.modal("show");
         $("#usernameInput").focus();
         return false;
     };
@@ -526,9 +556,9 @@ var bookreader = function() {
             for(i=0; i<match.length; i++) {
                 var url = match[i];
                 // replace with anchor element
-                var urlName = url.replace("http://", "");
+                var urlName = url.replace("http://", "").replace("https://", "");
                 if(urlName.length>32){
-                    urlName = url.slice(0, 32)+"...";
+                    urlName = urlName.slice(0, 32)+"...";
                 }
                 var a_template = '<a href="{{url}}" target="_new">{{urlName}}</a>';
                 var anchor = Mustache.to_html(a_template, {url: url, urlName: urlName});
@@ -548,7 +578,7 @@ var bookreader = function() {
         var mediaContainer = null;
         if(mediaList.length>0) {
             // Post process the media
-            var mediaTemplate = '<div id="{{viewID}}"><a href="#">View media</a></div><div id="{{mediaID}}" style="display: none;"><p><a href="#" id="{{mediaID}}-toggle">Hide media</a></p><div id="{{mediaID}}-content"></div></div>';
+            var mediaTemplate = '<div id="{{viewID}}" class="showMediaContainer"><a href="#" class="viewMediaLink">View media</a></div><div id="{{mediaID}}" style="display: none;" class="mediaContainer"><p><a href="#" id="{{mediaID}}-toggle" class="hideMediaLink">Hide media</a></p></div>';
             var viewID = uuid();
             var mediaID = uuid();
             var mediaContainer = $(Mustache.to_html(mediaTemplate, {viewID: viewID, mediaID: mediaID}));
@@ -800,24 +830,28 @@ var bookreader = function() {
         aboutLinks.click(showAbout);
         colophonLinks.click(showColophon);
         helpLinks.click(showHelp);
-        loginForm.modal({
+        submitLoginForm.button();
+        loginFormContainer.modal({
             backdrop: "static"
         });
         annotations.modal({
             backdrop: "static"
         });
         $("#cancelLogin").click(function(){
+            loginFormError.hide();
             $("#loginFormError").hide();
-            loginForm.modal("hide");
+            loginFormContainer.modal("hide");
         });
         $("#closeAnnotations").click(function(){
             annotations.modal("hide");
+            $("#newCommentFormError").hide();
             newCommentForm.hide();
             annotateButton.show();
         });
         loginLink.click(showLogin);
         logoutLink.click(logout);
-        loginForm.unbind('submit').submit(login);
+        loginFormContainer.unbind('submit').submit(login);
+        loginForm.submit(login);
         $(".chapterLink").click(getChapter);
         previousLink.click(getChapter);
         nextLink.click(getChapter);

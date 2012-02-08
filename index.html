@@ -77,7 +77,7 @@
                             </li>
                             <li><a href="#about" class="about" title="About this application">About</a></li>
                             <li><a href="#colophon" class="colophon" title="How this application was built">Colophon</a></li>
-                            <li><a href="javascript:UserVoice.showPopupWidget();" title="Open the feedback widget">Feedback</a></li>
+                            <li><a href="javascript:UserVoice.showPopupWidget();" title="Open the feedback widget" id="feedbackLink">Feedback</a></li>
                             <li><a href="#help" class="help" title="How to use this application">Help</a></li>
                         </ul>
                         <ul class="nav secondary-nav">
@@ -92,13 +92,13 @@
         <div class="container">
             <div class="content" style="padding-top: 8px">
                 <div class="row" id="working" style="display: none;">
-                    <div class="alert-message info">
+                    <div class="alert-message info span14 offset1">
                         <h1><strong>Working...</strong></h1>
                         <p>Communicating with Fluidinfo... <img src="images/working.gif" alt="Working..."/></p>
                     </div>
                 </div>
                 <div class="row" id="oops" style="display: none;">
-                    <div class="alert-message error">
+                    <div class="alert-message error span14 offset1">
                         <p>
                             <strong>Oops!</strong>
                             Something appears to have gone wrong. Please see
@@ -396,7 +396,7 @@ Comment 2</pre>
                 </div>
             </div>
         </div>
-        <div id="loginForm" class="modal hide" style="display: none;">
+        <div id="loginFormContainer" class="modal hide" style="display: none;">
             <div class="modal-header">
                 <a href="#" class="close">&times;</a>
                 <h3>Login</h3>
@@ -428,7 +428,7 @@ Comment 2</pre>
                     </fieldset>
             </div>
             <div class="modal-footer">
-                            <input type="submit" class="btn primary" value="Submit"/>
+                            <button type="submit" class="btn primary" data-loading-text="Checking..." id="loginFormSubmit"/>Submit</button>
                             <button type="reset" class="btn" id="cancelLogin">Cancel</button>
             </div>
             </form>
